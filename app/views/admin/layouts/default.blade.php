@@ -79,7 +79,6 @@
         <script src="{{{asset('assets/fancybox/jquery.fancybox-1.3.4.pack.js')}}}"></script>
         <script src="{{{asset('assets/bootstrapvalidator/dist/js/bootstrapValidator.min.js')}}}"></script>
         <script src="{{{asset('assets//tinymce/tinymce.min.js')}}}"></script>
-        <script type="text/javascript" src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
         <script>
             var filemanager_access_key = "<?php echo md5("jdlfa900" . Config::get('app.key'));?>";
             <?php
@@ -138,8 +137,15 @@
                                     ?>
                                 </ul>
                             </li>
-                            <li{{{ (Request::is('admin/entity*') ? ' class="active"' : '') }}}><a href="{{{ URL::to('admin/entity') }}}"><span class="glyphicon glyphicon-list-alt"></span> Entities</a></li>
-                            <li class="dropdown{{{ (Request::is('admin/language*') ? ' active' : '') }}}">
+                            <li class="dropdown{{{ (Request::is('admin/entity*') ? ' active' : '') }}}">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="{{{ URL::to('admin/entity') }}}">
+                                    <span class="glyphicon "></span> Entities <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li{{{ (Request::is('admin/entity') ? ' class="active"' : '') }}}><a href="{{{ URL::to('admin/entity') }}}"><span class="glyphicon glyphicon-th-list"></span> List</a></li>
+                                    <li{{{ (Request::is('admin/entity/create') ? ' class="active"' : '') }}}><a href="{{{ URL::to('admin/entity/create') }}}"><span class="glyphicon glyphicon-plus"></span> Add</a></li>
+                                </ul>
+                            </li><li class="dropdown{{{ (Request::is('admin/language*') ? ' active' : '') }}}">
                                 <a class="dropdown-toggle" data-toggle="dropdown" href="{{{ URL::to('admin/language') }}}">
                                     <span class="glyphicon "></span> Languages <span class="caret"></span>
                                 </a>

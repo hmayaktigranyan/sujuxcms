@@ -138,7 +138,7 @@ class AdminEntityController extends AdminController {
         $fieldsOrdered = array_sort($object->fields, function($value) {
             return $value['order'];
         });
-        return View::make('admin.' . $this->path . '.fields')->with('fieldTypes', $this->fieldTypes)
+        return View::make('admin.' . $this->path . '.fields')
                         ->with('object', $object)->with('taxonomies', $taxonomies)->with('fieldsOrdered', $fieldsOrdered);
     }
 
@@ -190,10 +190,10 @@ class AdminEntityController extends AdminController {
                 $maxOrder++;
                 $field['enabled'] = true;
                 $field['order'] = $maxOrder;
+                $field['visible_form'] = true;
                 $fields[$field['name']] = $field;
                 $fieldsChanged = true;
                 // DB::collection('entities')->where('_id', $object->id)->push('fields', $field);
-                
             }
             Notification::success('Successfully added !');
         }
@@ -219,7 +219,7 @@ class AdminEntityController extends AdminController {
             }
             $fieldsChanged = true;
             Notification::success('Successfully deleted !');
-        } elseif (($inputs['fields_list'] && $inputs['bulkaction'] == "updateselected") || isset($inputs['update']) ) {
+        } elseif (($inputs['fields_list'] && $inputs['bulkaction'] == "updateselected") || isset($inputs['update'])) {
 
             if (isset($inputs['title']) && is_array($inputs['title'])) {
                 foreach ($inputs['title'] as $fieldName => $titles) {
@@ -314,6 +314,7 @@ class AdminEntityController extends AdminController {
                 $object->save();
             }
         }
+        Notification::success('Successfully updated !');
         return Redirect::back();
     }
 
@@ -324,7 +325,7 @@ class AdminEntityController extends AdminController {
         $fieldsOrdered = array_sort($object->fields, function($value) {
             return $value['order'];
         });
-        return View::make('admin.' . $this->path . '.fields-details')->with('fieldTypes', $this->fieldTypes)
+        return View::make('admin.' . $this->path . '.fields-details')
                         ->with('object', $object)->with('taxonomies', $taxonomies)->with('fieldsOrdered', $fieldsOrdered);
     }
 
@@ -366,13 +367,14 @@ class AdminEntityController extends AdminController {
             $fields[$fieldName]['visible_form'] = $visible_form;
             $fields[$fieldName]['visible_browse'] = $visible_browse;
             $fields[$fieldName]['filter_browse'] = $filter_browse;
-            $fields[$fieldName]['validation'] = $inputs['validation'.$postfix];
+            $fields[$fieldName]['validation'] = $inputs['validation' . $postfix];
             $fieldsChanged = true;
         }
 
         if ($fieldsChanged) {
             $object->fields = $fields;
             $object->save();
+            Notification::success('Successfully updated !');
         }
         return Redirect::back();
     }

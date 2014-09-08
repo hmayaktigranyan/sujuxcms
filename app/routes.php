@@ -24,8 +24,8 @@ Route::controller('user', 'UserController');
 Route::group(array('prefix' => 'admin', 'before' => 'auth'), function() {
     Route::get('profile', array('uses' => 'AdminController@profile'));
     Route::any('profileupdate', array('uses' => 'AdminController@profileUpdate'));
-    
-    
+
+
     Route::resource('entity', 'AdminEntityController');
     Route::get('entity/{id}/delete', array('uses' => 'AdminEntityController@confirmDestroy'));
     Route::any('entity/fields/{id}', array('uses' => 'AdminEntityController@fields'));
@@ -35,7 +35,7 @@ Route::group(array('prefix' => 'admin', 'before' => 'auth'), function() {
     Route::any('entity/fields/{id}', array('uses' => 'AdminEntityController@fields'));
     Route::any('entity/fieldsdetails/{id}', array('uses' => 'AdminEntityController@fieldsDetails'));
     Route::any('entity/fieldsdetailsupdate/{id}', array('uses' => 'AdminEntityController@fieldsDetailsUpdate'));
-   
+
     Route::resource('language', 'AdminLanguageController');
     Route::get('language/{id}/delete', array('uses' => 'AdminLanguageController@confirmDestroy'));
 
@@ -45,6 +45,18 @@ Route::group(array('prefix' => 'admin', 'before' => 'auth'), function() {
     Route::any('taxonomy/termsupdate/{id}', array('uses' => 'AdminTaxonomyController@termsUpdate'));
     Route::any('taxonomy/termsorder/{id}', array('uses' => 'AdminTaxonomyController@termsOrder'));
     Route::any('taxonomy/termsorderupdate/{id}', array('uses' => 'AdminTaxonomyController@termsOrderUpdate'));
+    Route::any('taxonomy/fields/{id}', array('uses' => 'AdminTaxonomyController@fields'));
+    Route::any('taxonomy/fieldsupdate/{id}', array('uses' => 'AdminTaxonomyController@fieldsUpdate'));
+    Route::any('taxonomy/fieldsorder/{id}', array('uses' => 'AdminTaxonomyController@fieldsOrder'));
+    Route::any('taxonomy/fieldsorderupdate/{id}', array('uses' => 'AdminTaxonomyController@fieldsOrderUpdate'));
+    Route::any('taxonomy/fieldsdetails/{id}', array('uses' => 'AdminTaxonomyController@fieldsDetails'));
+    Route::any('taxonomy/fieldsdetailsupdate/{id}', array('uses' => 'AdminTaxonomyController@fieldsDetailsUpdate'));
+    Route::any('taxonomy/termshow/{id}', array('uses' => 'AdminTaxonomyController@termShow'));
+    Route::any('taxonomy/termedit/{id}', array('uses' => 'AdminTaxonomyController@termEdit'));
+    Route::any('taxonomy/termupdate/{id}', array('uses' => 'AdminTaxonomyController@termUpdate'));
+    Route::any('taxonomy/termdelete/{id}', array('uses' => 'AdminTaxonomyController@termConfirmDestroy'));
+    Route::any('taxonomy/termdestroy/{id}', array('uses' => 'AdminTaxonomyController@termDestroy'));
+
 
     Route::any('object/create/{id}', array('uses' => 'AdminObjectController@create'));
     Route::any('object/store/{id}', array('uses' => 'AdminObjectController@store'));

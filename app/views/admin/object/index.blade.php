@@ -156,7 +156,8 @@ $locale = App::getLocale();
                                               <?php
                                               } */
                                             ?>
-                                            <td>
+                                           
+                                                        <td>
                                                 <div class="btn-group">
                                                     <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                                                         Action  <span class="caret"></span>

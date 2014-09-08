@@ -14,10 +14,10 @@ $locale = App::getLocale();
             <ul class="nav nav-tabs" role="tablist">
                 <li ><a href="{{{ url('admin/'.$path.'/fields/'.$object->id) }}}">Fields</a</li>
                 <li class="active"><a href="#">Fields Order</a></li>
-                <li><a href="{{{ url('admin/'.$path.'/fieldsdetails/'.$object->id) }}}">Fields Details</a></li>
-
+                 <li><a href="{{{ url('admin/'.$path.'/fieldsdetails/'.$object->id) }}}">Fields Details</a></li>
+               
             </ul><br/>
-            {{ Form::open( array( 'action' => array( 'AdminEntityController@fieldsOrderUpdate', $object->id), 'method' => 'PATCH')) }}
+            {{ Form::open( array( 'action' => array( 'AdminTaxonomyController@fieldsOrderUpdate', $object->id), 'method' => 'PATCH')) }}
 
             <center>
 

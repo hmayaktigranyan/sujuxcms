@@ -46,7 +46,7 @@ return array(
             'port' => 27017,
             'username' => '',
             'password' => '',
-            'database' => 'laravel_project1'
+            'database' => 'daftarkhana'
         ),
         'sqlite' => array(
             'driver' => 'sqlite',

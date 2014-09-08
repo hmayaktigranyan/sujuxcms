@@ -16,6 +16,7 @@
                         <tr>
                             <th>Name</th>
                             <th>Terms</th>
+                            <th>Terms Fields</th>
                             <?php
                             foreach ($languages as $language) {
                                 ?><th><?php echo $language->title; ?></th>
@@ -31,6 +32,7 @@
                         <tr>
                             <td> <a class="btn btn-link btn-xs" href="{{{ URL::to('admin/'.$path.'/' . $value->id) }}}">{{{ $value->name }}}</a></td>
                             <td> <a class="btn btn-link btn-xs" href="{{{ URL::to('admin/'.$path.'/terms/' . $value->id) }}}">Terms</a></td>
+                            <td> <a class="btn btn-link btn-xs" href="{{{ URL::to('admin/'.$path.'/fields/' . $value->id) }}}">Terms Fields</a></td>
                             <?php
                             foreach ($languages as $language) {
                                 $fieldName = "title_" . $language->code;

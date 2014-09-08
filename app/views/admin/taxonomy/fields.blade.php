@@ -13,11 +13,12 @@ $locale = App::getLocale();
              <ul class="nav nav-tabs" role="tablist">
                  <li  class="active"><a href="#">Fields</a</li>
                 <li><a href="{{{ url('admin/'.$path.'/fieldsorder/'.$object->id) }}}">Fields Order</a></li>
-                <li><a href="{{{ url('admin/'.$path.'/fieldsdetails/'.$object->id) }}}">Fields Details</a></li>
+                 <li><a href="{{{ url('admin/'.$path.'/fieldsdetails/'.$object->id) }}}">Fields Details</a></li>
+               
                 
             </ul><br/>
            
-            {{ Form::open( array( 'action' => array( 'AdminEntityController@fieldsUpdate', $object->id), 'method' => 'PATCH','class'=>'form')) }}
+            {{ Form::open( array( 'action' => array( 'AdminTaxonomyController@fieldsUpdate', $object->id), 'method' => 'PATCH','class'=>'form')) }}
 
             <center>
 
@@ -149,6 +150,9 @@ $locale = App::getLocale();
         template += "</select>";
         template += "<div id='taxonomy_div_" + selectId + "' ><br/><select class='select' name='new_field_taxonomy[]' id='taxonomy_" + selectId + "' >";
 <?php foreach ($taxonomies as $k => $v) {
+    if($k == $object->id){
+        continue;
+    }
     ?>
             template += "<option value='<?php echo $k ?>'><?php echo $v ?></option>";
     <?php

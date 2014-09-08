@@ -39,7 +39,7 @@ $locale = App::getLocale();
                 </select>
                 &nbsp;
                 <button type="submit" name="apply" class='btn  btn-success'  ><i class="icon-ok"></i> 
-<?php echo trans('Apply') ?></button>
+                    <?php echo trans('Apply') ?></button>
             </div>
             <br/><br/>
             <table class='table table-bordered table-striped table-hover' id="mtlist">
@@ -56,25 +56,46 @@ $locale = App::getLocale();
                             echo 'class="active"';
                         }
                         ?> ><a href="#<?php echo $language->code ?>" data-toggle="tab" data-locale="<?php echo $language->code ?>"><?php echo $language->title ?></a></li>
-<?php } ?>
+                        <?php } ?>
                 </ul>
                 </th>
+                <?php
+                $fieldsExists = false;
+                foreach ($fields as $field) {
+                    if (!$field['enabled'] || !$field['visible_browse']) {
+                        continue;
+                    }
+                    $fieldsExists = true;
+                    $fieldName = $field['name'];
+                    $fieldType = $field['type'];
+                    $fieldTitle = $field['title_' . $locale];
+                    ?>
+                    <th><?php echo $fieldTitle ?></th>
+                    <?php
+                }
+                if ($fieldsExists) {
+                    ?>
+                    <th>Action</th>
+                    <?php
+                }
+                ?>
+
                 </tr>
                 </thead>
                 <tbody>
-                    <?php
-                    foreach ($terms as $record) {
+                    <?php 
+                    foreach ($terms as $value) {
                         ?>
                         <tr>
-                            <td> <input  type="checkbox" class="chk" name="term_list[<?php echo $record['_id'] ?>]"  value="1"
+                            <td> <input  type="checkbox" class="chk" name="term_list[<?php echo $value['_id'] ?>]"  value="1"
                                 <?php
-                                if ($_POST['bulkaction'] == "deleteselected" && is_array($_POST['term_list']) && isset($_POST['term_list'][$record['term']])) {
+                                if ($_POST['bulkaction'] == "deleteselected" && is_array($_POST['term_list']) && isset($_POST['term_list'][$value['term']])) {
                                     echo " checked='checked' ";
                                 }
                                 ?>
                                          ></input>
                             </td>
-                            <td><?php echo $record['visible'];
+                            <td><?php echo $value['visible'];
                                 ?></td>
 
                             <td>
@@ -82,23 +103,104 @@ $locale = App::getLocale();
                                 foreach ($languages as $language) {
                                     ?>
                                     <div class="titleinputdiv titleinputdiv_<?php echo $language->code ?>" <?php
-                                         $fieldName = "title_" . $language->code;
+                                    $fieldName = "title_" . $language->code;
 
 
-                                         if ($locale != $language->code) {
-                                             echo 'style="display:none"';
-                                         }
-                                         ?>>
-                                        <input  type="text" name="title[<?php echo $record['_id']; ?>][<?php echo $language->code ?>]"  value="<?php if ($record[$fieldName]) echo htmlentities($record[$fieldName], ENT_QUOTES, "UTF-8"); ?>"></input>
+                                    if ($locale != $language->code) {
+                                        echo 'style="display:none"';
+                                    }
+                                    ?>>
+                                        <input  type="text" name="title[<?php echo $value['_id']; ?>][<?php echo $language->code ?>]"  value="<?php if ($value[$fieldName]) echo htmlentities($value[$fieldName], ENT_QUOTES, "UTF-8"); ?>" 
+                                                class="form-control"></input>
 
                                     </div>
                                     <?php
                                 }
                                 ?>
                             </td>
+                            <?php
+                            foreach ($fields as $field) {
+                                if (!$field['enabled'] || !$field['visible_browse']) {
+                                    continue;
+                                }
+                                $fieldName = $field['name'];
+                                $fieldType = $field['type'];
+                                $fieldTitle = $field['title_' . $locale];
+                                ?>
+                                <td><?php
+                                    if ($fieldType == 'tree' || $fieldType == 'select') {
+                                        $fieldVal = $value[$fieldName];
+                                        if (is_array($fieldVal)) {
+                                            $fieldVal = array_shift($fieldVal);
+                                        }
+                                        echo $taxonomyTerms[$field['taxonomy_id']][$fieldVal];
+                                    } elseif ($fieldType == 'multitree' || $fieldType == 'multiselect') {
+                                        $fieldVals = $value[$fieldName];
+
+                                        if (!is_array($fieldVals)) {
+                                            $fieldVals = array($fieldVals);
+                                        }
+                                        $fieldVals2 = array();
+                                        foreach ($fieldVals as $fieldVal) {
+                                            $fieldVals2[] = $taxonomyTerms[$field['taxonomy_id']][$fieldVal];
+                                        }
+                                        echo implode(", ", $fieldVals2);
+                                    } elseif ($fieldType == 'date') {
+
+                                        if ($value[$fieldName]) {
+                                            if ($value[$fieldName] instanceof MongoDate) {
+                                                $value[$fieldName] = $value[$fieldName]->sec;
+                                            }
+                                            echo Carbon::createFromTimestamp($value[$fieldName])->format('Y-m-d');
+                                        }
+                                    } elseif ($fieldType == 'file' || $fieldType == 'image') {
+                                        if ($value[$fieldName]) {
+                                            $pathinfo = pathinfo($value[$fieldName]);
+                                            echo "<a href='" . $value[$fieldName] . "' target='_blank'>" . $pathinfo['basename'] . "</a>";
+                                        }
+                                    } elseif ($fieldType == 'checkbox') {
+
+                                        if ($value[$fieldName]) {
+                                            echo trans('Yes');
+                                        } else {
+                                            echo trans('No');
+                                        }
+                                    } else {
+                                        echo $value[$fieldName];
+                                    }
+                                    ?></td>
+                                <?php
+                            }
+                            if ($fieldsExists) {
+                                ?>
+                                <td>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                            Action  <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" role="menu">
+
+
+                                            <li><a href="{{{ URL::to('admin/'.$path.'/termshow/' . $value['_id']) }}}" class="btn">
+                                                    <span class="glyphicon glyphicon-eye-open"></span>&nbsp;Show
+                                                </a></li>
+                                            <li> <a href="{{{ URL::to('admin/'.$path.'/termedit/' .$value['_id']) }}}" class="btn">
+                                                    <span class="glyphicon glyphicon-edit"></span>&nbsp;Edit
+                                                </a></li>
+                                            <li> <a href="{{{ URL::to('admin/'.$path.'/termdelete/' . $value['_id']) }}}" class="btn">
+                                                    <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;Delete
+                                                </a></li>
+
+                                        </ul>
+                                    </div>
+
+                                </td>
+                            <?php }
+                            ?>
+
 
                         </tr>
-<?php } ?>
+                    <?php } ?>
 
                 </tbody>
             </table>
@@ -128,16 +230,16 @@ $locale = App::getLocale();
         var template = "";
         template += "<tr><td></td><td></td><td>";
         template += "<?php
-foreach ($languages as $language) {
+                    foreach ($languages as $language) {
 
-    echo "<div class='titleinputdiv titleinputdiv_" . $language->code . "' ";
-    if ($locale != $language->code) {
-        echo "style='display:none'";
-    }
-    echo ">";
-    echo "<input  type='text' name='new_term_title[" . $language->code . "][]'  /></div>";
-}
-?>";
+                        echo "<div class='titleinputdiv titleinputdiv_" . $language->code . "' ";
+                        if ($locale != $language->code) {
+                            echo "style='display:none'";
+                        }
+                        echo ">";
+                        echo "<input  type='text' name='new_term_title[" . $language->code . "][]' class='form-control'  /></div>";
+                    }
+                    ?>";
         template += "</td></tr>";
         $('#mtlist  tr:last').after(template);
         /*if($('#mtlist > tbody > tr:first').lenght){

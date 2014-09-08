@@ -17,7 +17,7 @@ $locale = App::getLocale();
                 
             </ul><br/>
             
-            {{ Form::open( array( 'action' => array( 'AdminEntityController@fieldsDetailsUpdate', $object->id), 'method' => 'PATCH','class'=>'form')) }}
+            {{ Form::open( array( 'action' => array( 'AdminTaxonomyController@fieldsDetailsUpdate', $object->id), 'method' => 'PATCH','class'=>'form')) }}
 
             <center>
 
@@ -33,9 +33,7 @@ $locale = App::getLocale();
                         <th ><?php echo(trans('Type')); ?></th>
                         <th ><?php echo(trans('Enabled')); ?></th>
                         <th><?php echo(trans('Visible in form')); ?></th>
-                        <th><?php echo(trans('Visible in browse')); ?></th>
-                        <th><?php echo(trans('Browse filter')); ?></th>
-                        <th ><?php echo(trans('Validation rules')); ?></th>
+                        <th><?php echo(trans('Visible in list')); ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -59,18 +57,7 @@ $locale = App::getLocale();
                                 <td><?php echo $value['enabled']; ?></td>
                                 <td>{{ Form::checkbox('visible_form'.$postfix,1,$value['visible_form'] ) }}</td>
                                 <td>{{ Form::checkbox('visible_browse'.$postfix,1,$value['visible_browse'] ) }}</td>
-                                <td>{{ Form::checkbox('filter_browse'.$postfix,1,$value['filter_browse'] ) }}</td>
-                                <td>
-
-                                    <?php
-                                    $rules = array('required' => trans('Required'));
-                                    $id = 'validation' . $postfix;
-                                    $name = 'validation' . $postfix . "[]";
-                                    ?>
-                                    {{ Form::select($name, $rules, $value['validation'],array('multiple'=>true,'class'=>'select', 'id' => $id)) }}
-
-                                </td>
-
+                                
                             </tr>
                             <?php
                         }

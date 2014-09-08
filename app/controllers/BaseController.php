@@ -5,11 +5,10 @@ use Illuminate\Routing\Controller;
 class BaseController extends Controller {
 
     protected $path = "";
-
     protected $fieldTypes = array();
-    
+    protected $taxonomyFieldTypes = array();
     protected $pageSize = 10;
-    
+
     public function __construct() {
         $languages = Language::all();
         View::share('languages', $languages);
@@ -23,7 +22,7 @@ class BaseController extends Controller {
         }
         $entities = Entity::all();
         View::share('entities', $entities);
-        
+
         $this->fieldTypes = array(
             'text' => trans('Text'),
             'textarea' => trans('Textarea'),
@@ -35,7 +34,7 @@ class BaseController extends Controller {
             //'user_select' => trans('User Select'),
             //'user_select_multi' => trans('Multivalue User Select'),
             'tree' => trans('Tree'),
-            'multitree' => trans('MultivalutTree'),
+            'multitree' => trans('Multivalue Tree'),
             'select' => trans('Select'),
             'multiselect' => trans('Multivalue select'),
             'file' => trans('File'),
@@ -43,6 +42,8 @@ class BaseController extends Controller {
         );
         View::share('fieldTypes', $this->fieldTypes);
 
+
+        
     }
 
     /**

@@ -15,6 +15,9 @@
                     <a href="{{{ url('admin/'.$path.'/terms/'.$object->id) }}}"  class="btn btn-warning">
                         <span class="glyphicon glyphicon-th"></span>&nbsp;Terms
                     </a>
+                     <a href="{{{ url('admin/'.$path.'/fields/'.$object->id) }}}"  class="btn btn-success">
+                        <span class="glyphicon glyphicon-list"></span>&nbsp;Fields
+                    </a>
                     <a href="{{{ url('admin/'.$path.'/'.$object->id.'/edit') }}}"  class="btn btn-info">
                         <span class="glyphicon  glyphicon-edit"></span>&nbsp;Edit
                     </a>

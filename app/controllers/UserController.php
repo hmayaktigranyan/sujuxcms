@@ -143,6 +143,11 @@ class UserController extends BaseController {
      *
      */
     public function getLogin() {
+       /* Sentry::register(array(
+    'username'    => 'admin',
+    'password' => 'admin',
+     'activated' => true
+));*/
         if (!Sentry::check()) {
             return View::make('user/login');
         }
